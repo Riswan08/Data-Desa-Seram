@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Status Kelistrikan Desa — Werinama & Kilmury, Kab. Seram Bagian Timur</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f1f4f8;
+    --ink:#0a1628;
+    --midnight:#0c1a35;
+    --midnight-soft:#1a2a4a;
+    --gold:#c9a55c;
+    --gold-soft:#d9b878;
+    --green:#3a8a5a;
+    --green-soft:#e6f1ea;
+    --amber:#d68a2f;
+    --amber-soft:#fbeed5;
+    --red:#b5384a;
+    --red-soft:#f5dee2;
+    --line:#d9dde3;
+    --muted:#6b7585;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    font-weight:300;
+    line-height:1.55;
+    letter-spacing:-0.005em;
+  }
+  .page{
+    max-width:1280px;
+    margin:0 auto;
+    padding:48px 40px 80px;
+  }
+
+  /* ============ HEADER ============ */
+  .header{
+    border-bottom:1px solid var(--line);
+    padding-bottom:28px;
+    margin-bottom:48px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:end;
+    gap:32px;
+  }
+  .header h1{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:500;
+    font-size:42px;
+    line-height:1.05;
+    color:var(--midnight);
+    letter-spacing:-0.01em;
+  }
+  .header h1 em{
+    font-style:italic;
+    color:var(--gold);
+    font-weight:600;
+  }
+  .header .sub{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.18em;
+    color:var(--muted);
+    margin-top:14px;
+  }
+  .header .meta{
+    text-align:right;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    color:var(--muted);
+  }
+  .header .meta strong{color:var(--midnight);font-weight:600;display:block;margin-top:4px;font-size:11px}
+
+  /* ============ MAP SECTION ============ */
+  .map-wrap{
+    position:relative;
+    border-radius:4px;
+    overflow:hidden;
+    background:var(--bg);
+    margin-bottom:64px;
+    box-shadow:0 1px 0 var(--line);
+  }
+  .map-img{
+    width:100%;
+    display:block;
+  }
+  .pin{
+    position:absolute;
+    transform:translate(-50%,-100%);
+    pointer-events:none;
+  }
+  .pin .dot{
+    width:18px;height:18px;
+    border-radius:50%;
+    background:var(--gold);
+    border:3px solid #fff;
+    box-shadow:0 2px 8px rgba(10,22,40,0.4);
+    margin:0 auto 4px;
+    position:relative;
+    animation:pulse 2.4s ease-out infinite;
+  }
+  .pin .dot::before{
+    content:'';
+    position:absolute;
+    top:50%;left:50%;
+    width:18px;height:18px;
+    border-radius:50%;
+    background:var(--gold);
+    transform:translate(-50%,-50%);
+    animation:ripple 2.4s ease-out infinite;
+    opacity:0;
+  }
+  @keyframes pulse{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.08)}
+  }
+  @keyframes ripple{
+    0%{transform:translate(-50%,-50%) scale(1);opacity:0.6}
+    100%{transform:translate(-50%,-50%) scale(3.5);opacity:0}
+  }
+  .pin-label{
+    background:rgba(12,26,53,0.96);
+    color:#fff;
+    padding:6px 12px;
+    border-radius:2px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    border-left:2px solid var(--gold);
+  }
+  .pin-label small{
+    display:block;
+    color:var(--gold-soft);
+    font-size:9px;
+    letter-spacing:0.1em;
+    margin-top:2px;
+    font-weight:400;
+  }
+  /* Werinama: tengah-selatan Pulau Seram bagian timur */
+  .pin-werinama{ left:50.5%; top:42%; }
+  /* Kilmury: lebih ke timur, di pesisir selatan */
+  .pin-kilmury{ left:64%; top:46%; }
+  .pin-kilmury .pin-label{ border-left-color:var(--amber); }
+  .pin-kilmury .dot{ background:var(--amber); }
+  .pin-kilmury .dot::before{ background:var(--amber); }
+
+  .map-legend{
+    position:absolute;
+    bottom:24px;left:24px;
+    background:rgba(241,244,248,0.95);
+    backdrop-filter:blur(8px);
+    padding:14px 18px;
+    border-radius:2px;
+    border-left:2px solid var(--gold);
+  }
+  .map-legend h4{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:8px;
+    font-weight:500;
+  }
+  .map-legend .leg{
+    display:flex;align-items:center;gap:8px;
+    font-size:11px;color:var(--midnight);
+    font-weight:400;
+    margin-top:4px;
+  }
+  .map-legend .leg span{
+    width:10px;height:10px;border-radius:50%;
+  }
+
+  /* ============ SECTION HEADERS ============ */
+  .section-head{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:24px;
+    align-items:baseline;
+    margin-bottom:32px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--line);
+  }
+  .section-num{
+    font-family:'Cormorant Garamond',serif;
+    font-size:64px;
+    font-weight:500;
+    color:var(--gold);
+    font-style:italic;
+    line-height:1;
+  }
+  .section-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:30px;
+    font-weight:500;
+    color:var(--midnight);
+    letter-spacing:-0.01em;
+  }
+  .section-title small{
+    display:block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.18em;
+    color:var(--muted);
+    margin-bottom:6px;
+    font-weight:400;
+  }
+
+  /* ============ KECAMATAN CARDS ============ */
+  .kec-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:32px;
+    margin-bottom:80px;
+  }
+  .kec-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:36px 32px;
+    position:relative;
+  }
+  .kec-card::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;
+    width:64px;height:2px;
+  }
+  .kec-card.werinama::before{background:var(--gold)}
+  .kec-card.kilmury::before{background:var(--amber)}
+
+  .kec-name{
+    font-family:'Cormorant Garamond',serif;
+    font-size:34px;
+    font-weight:600;
+    color:var(--midnight);
+    letter-spacing:-0.01em;
+    margin-bottom:4px;
+  }
+  .kec-sub{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.18em;
+    color:var(--muted);
+    margin-bottom:28px;
+  }
+
+  /* Stats row */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    margin-bottom:32px;
+    border:1px solid var(--line);
+  }
+  .stat{
+    background:#fff;
+    padding:18px 14px;
+    text-align:center;
+  }
+  .stat .num{
+    font-family:'Cormorant Garamond',serif;
+    font-size:42px;
+    font-weight:600;
+    line-height:1;
+    color:var(--midnight);
+  }
+  .stat.on .num{color:var(--green)}
+  .stat.off .num{color:var(--red)}
+  .stat .lbl{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9px;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    color:var(--muted);
+    margin-top:6px;
+    font-weight:500;
+  }
+
+  /* Progress bar */
+  .progress-wrap{margin-bottom:28px}
+  .progress-lbl{
+    display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;text-transform:uppercase;
+    letter-spacing:0.14em;color:var(--muted);
+    margin-bottom:6px;
+  }
+  .progress-lbl strong{color:var(--midnight);font-weight:600}
+  .progress-bar{
+    height:8px;
+    background:var(--line);
+    border-radius:1px;
+    overflow:hidden;
+    display:flex;
+  }
+  .progress-bar .on-seg{background:var(--green)}
+  .progress-bar .off-seg{background:var(--red-soft)}
+
+  /* Village list */
+  .vill-section{margin-top:24px}
+  .vill-section h5{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.16em;
+    color:var(--midnight);
+    margin-bottom:12px;
+    font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .vill-section h5 .badge{
+    display:inline-block;
+    width:8px;height:8px;border-radius:50%;
+  }
+  .vill-section h5 .count{
+    margin-left:auto;
+    color:var(--muted);
+    font-weight:400;
+  }
+  .vill-list{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:6px;
+  }
+  .vill-list.three{grid-template-columns:repeat(2,1fr)}
+  .vill{
+    background:#fff;
+    border:1px solid var(--line);
+    padding:9px 12px;
+    border-radius:2px;
+    font-size:12px;
+    font-weight:400;
+    color:var(--ink);
+    display:flex;align-items:center;gap:8px;
+  }
+  .vill.on{border-left:2px solid var(--green);background:var(--green-soft)}
+  .vill.partial{border-left:2px solid var(--amber);background:var(--amber-soft)}
+  .vill.off{border-left:2px solid var(--red);background:var(--red-soft)}
+  .vill .dur{
+    margin-left:auto;
+    font-family:'JetBrains Mono',monospace;
+    font-size:9px;color:var(--muted);
+    letter-spacing:0.05em;
+  }
+  .vill.cap{font-weight:500}
+  .vill.cap::after{
+    content:'★';
+    margin-left:4px;
+    color:var(--gold);
+    font-size:10px;
+  }
+
+  /* ============ PROGRESS / RENCANA ============ */
+  .roadmap{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:40px 36px;
+  }
+  .timeline{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:0;
+    margin-bottom:40px;
+    position:relative;
+  }
+  .timeline::before{
+    content:'';
+    position:absolute;
+    top:14px;left:5%;right:5%;
+    height:1px;
+    background:linear-gradient(to right,var(--green),var(--amber),var(--red-soft));
+  }
+  .tl-step{
+    text-align:center;
+    position:relative;
+    padding:0 12px;
+  }
+  .tl-step .marker{
+    width:28px;height:28px;border-radius:50%;
+    background:#fff;
+    border:2px solid var(--gold);
+    margin:0 auto 16px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-weight:600;
+    color:var(--midnight);
+    font-size:14px;
+    position:relative;
+    z-index:1;
+  }
+  .tl-step h6{
+    font-family:'Cormorant Garamond',serif;
+    font-size:18px;font-weight:600;
+    color:var(--midnight);
+    margin-bottom:4px;
+  }
+  .tl-step .yr{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.14em;
+    color:var(--muted);
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .tl-step p{
+    font-size:12px;
+    color:var(--ink);
+    line-height:1.5;
+    font-weight:300;
+  }
+
+  .plan-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    margin-top:36px;
+    padding-top:36px;
+    border-top:1px solid var(--line);
+  }
+  .plan{
+    padding:24px;
+    background:var(--bg);
+    border-radius:2px;
+    border-left:3px solid var(--gold);
+  }
+  .plan.kilmury{border-left-color:var(--amber)}
+  .plan h6{
+    font-family:'Cormorant Garamond',serif;
+    font-size:22px;font-weight:600;
+    color:var(--midnight);
+    margin-bottom:14px;
+  }
+  .plan ul{list-style:none;padding:0}
+  .plan li{
+    font-size:12.5px;
+    padding:8px 0;
+    border-bottom:1px dotted var(--line);
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:10px;
+    align-items:start;
+  }
+  .plan li:last-child{border-bottom:none}
+  .plan li::before{
+    content:'›';
+    color:var(--gold);
+    font-weight:700;
+    font-size:16px;
+    line-height:1;
+  }
+  .plan.kilmury li::before{color:var(--amber)}
+  .plan li strong{font-weight:600;color:var(--midnight)}
+
+  .infra-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-top:24px;
+  }
+  .infra{
+    background:#fff;
+    padding:18px 14px;
+    text-align:center;
+  }
+  .infra .v{
+    font-family:'Cormorant Garamond',serif;
+    font-size:28px;font-weight:600;
+    color:var(--midnight);
+    line-height:1;
+  }
+  .infra .v small{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    color:var(--muted);
+    font-weight:400;
+    margin-left:2px;
+  }
+  .infra .l{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-top:6px;
+  }
+
+  /* ============ FOOTER ============ */
+  .footer{
+    margin-top:64px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;
+    font-size:9px;
+    color:var(--muted);
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .footer .src{max-width:65%}
+
+  @media (max-width:900px){
+    .page{padding:32px 20px}
+    .header{grid-template-columns:1fr;text-align:left}
+    .header .meta{text-align:left}
+    .kec-grid,.plan-grid{grid-template-columns:1fr}
+    .timeline{grid-template-columns:1fr;gap:24px}
+    .timeline::before{display:none}
+    .infra-row{grid-template-columns:repeat(2,1fr)}
+    .header h1{font-size:30px}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div>
+      <div class="sub">Materi Paparan · Status Kelistrikan Desa</div>
+      <h1>Kecamatan <em>Werinama</em> &amp; <em>Kilmury</em></h1>
+      <div class="sub" style="margin-top:8px">Kabupaten Seram Bagian Timur · Provinsi Maluku</div>
+    </div>
+    <div class="meta">
+      Per Mei 2026
+      <strong>Sumber: BPS SBT · PLN UIW MMU · DPRD SBT</strong>
+    </div>
+  </header>
+
+  <!-- MAP -->
+  <div class="map-wrap">
+    <img src="peta_seram.png" alt="Peta Pulau Seram" class="map-img">
+    <div class="pin pin-werinama">
+      <div class="dot"></div>
+      <div class="pin-label">Kec. Werinama<small>10 Desa · Pesisir Selatan</small></div>
+    </div>
+    <div class="pin pin-kilmury">
+      <div class="dot"></div>
+      <div class="pin-label">Kec. Kilmury<small>14 Desa · Pesisir Tenggara</small></div>
+    </div>
+    <div class="map-legend">
+      <h4>Lokasi Kecamatan</h4>
+      <div class="leg"><span style="background:var(--gold)"></span>Werinama</div>
+      <div class="leg"><span style="background:var(--amber)"></span>Kilmury</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 & 2: TOTAL DESA + STATUS -->
+  <div class="section-head">
+    <div class="section-num">01</div>
+    <div class="section-title">
+      <small>Total Desa &amp; Status Penyalaan</small>
+      Komposisi Desa per Kecamatan
+    </div>
+  </div>
+
+  <div class="kec-grid">
+
+    <!-- WERINAMA -->
+    <div class="kec-card werinama">
+      <div class="kec-name">Werinama</div>
+      <div class="kec-sub">Ibu Kota: Desa Werinama</div>
+
+      <div class="stats">
+        <div class="stat"><div class="num">10</div><div class="lbl">Total Desa</div></div>
+        <div class="stat on"><div class="num">7</div><div class="lbl">Sudah Menyala</div></div>
+        <div class="stat off"><div class="num">3</div><div class="lbl">Belum Penuh</div></div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-lbl"><span>Rasio Elektrifikasi</span><strong>70%</strong></div>
+        <div class="progress-bar">
+          <div class="on-seg" style="width:70%"></div>
+          <div class="off-seg" style="width:30%"></div>
+        </div>
+      </div>
+
+      <div class="vill-section">
+        <h5><span class="badge" style="background:var(--green)"></span>Sudah Menyala (7) <span class="count">disuplai PLTD Werinama</span></h5>
+        <div class="vill-list">
+          <div class="vill on cap">Werinama <span class="dur">24 jam</span></div>
+          <div class="vill on">Bemo <span class="dur">24 jam</span></div>
+          <div class="vill on">Hatumeten <span class="dur">24 jam</span></div>
+          <div class="vill on">Batuasa <span class="dur">24 jam</span></div>
+          <div class="vill on">Bemo Perak <span class="dur">24 jam</span></div>
+          <div class="vill on">Funa Naiyaba <span class="dur">24 jam</span></div>
+          <div class="vill on">Tobo <span class="dur">tahap akhir</span></div>
+        </div>
+      </div>
+
+      <div class="vill-section">
+        <h5><span class="badge" style="background:var(--red)"></span>Belum Menyala Penuh (3) <span class="count">"Utian Lima"</span></h5>
+        <div class="vill-list three">
+          <div class="vill off">Osong <span class="dur">proses jaringan</span></div>
+          <div class="vill off">Gusalaut <span class="dur">menunggu PLTD Kilmury</span></div>
+          <div class="vill off">Tum <span class="dur">menunggu PLTD Kilmury</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KILMURY -->
+    <div class="kec-card kilmury">
+      <div class="kec-name">Kilmury</div>
+      <div class="kec-sub">Ibu Kota: Negeri Kilmury</div>
+
+      <div class="stats">
+        <div class="stat"><div class="num">14</div><div class="lbl">Total Desa</div></div>
+        <div class="stat on"><div class="num">6</div><div class="lbl">Sudah Menyala</div></div>
+        <div class="stat off"><div class="num">8</div><div class="lbl">Belum Menyala</div></div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-lbl"><span>Rasio Elektrifikasi</span><strong>43%</strong></div>
+        <div class="progress-bar">
+          <div class="on-seg" style="width:43%"></div>
+          <div class="off-seg" style="width:57%"></div>
+        </div>
+      </div>
+
+      <div class="vill-section">
+        <h5><span class="badge" style="background:var(--green)"></span>Sudah Menyala (6) <span class="count">PLTD Kiandarat &amp; PLTD Kab. SBT</span></h5>
+        <div class="vill-list">
+          <div class="vill on cap">Kilmury <span class="dur">12 jam</span></div>
+          <div class="vill on">Kilbon Kway <span class="dur">12 jam</span></div>
+          <div class="vill on">Gunak <span class="dur">24 jam</span></div>
+          <div class="vill on">Sumbawa <span class="dur">24 jam</span></div>
+          <div class="vill on">Bitorik <span class="dur">24 jam</span></div>
+          <div class="vill on">Kamar <span class="dur">24 jam</span></div>
+        </div>
+      </div>
+
+      <div class="vill-section">
+        <h5><span class="badge" style="background:var(--red)"></span>Belum Menyala (8) <span class="count">tanpa akses listrik</span></h5>
+        <div class="vill-list">
+          <div class="vill off">Selor <span class="dur">—</span></div>
+          <div class="vill off">Nekan <span class="dur">—</span></div>
+          <div class="vill off">Afang Kota <span class="dur">—</span></div>
+          <div class="vill off">Afang Defol <span class="dur">—</span></div>
+          <div class="vill off">Kumelang <span class="dur">—</span></div>
+          <div class="vill off">Undur <span class="dur">—</span></div>
+          <div class="vill off">Mising <span class="dur">—</span></div>
+          <div class="vill off">Taa <span class="dur">—</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 3: PROGRES & RENCANA -->
+  <div class="section-head">
+    <div class="section-num">02</div>
+    <div class="section-title">
+      <small>Progres &amp; Rencana Penyalaan</small>
+      Skema Pelistrikan Desa Belum Menyala
+    </div>
+  </div>
+
+  <div class="roadmap">
+
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="marker">I</div>
+        <h6>Konstruksi Jaringan</h6>
+        <div class="yr">2024 — Berjalan</div>
+        <p>PLN UIW MMU membangun JTM 26,8 kms, JTR 3,2 kms, dan 4 unit Gardu Distribusi (200 kVA) untuk Desa Tobo, Osong, Gusalaut, dan Tum.</p>
+      </div>
+      <div class="tl-step">
+        <div class="marker">II</div>
+        <h6>Penyalaan Bertahap</h6>
+        <div class="yr">2025 — 2026</div>
+        <p>Penyalaan dilakukan setelah konstruksi selesai. Skema: Tobo &amp; Osong dari PLTD Werinama; Gusalaut &amp; Tum dari PLTD Kilmury. Tantangan: dua sungai besar memerlukan konstruksi transmisi.</p>
+      </div>
+      <div class="tl-step">
+        <div class="marker">III</div>
+        <h6>Perluasan Kilmury</h6>
+        <div class="yr">2026 — Prioritas</div>
+        <p>DPRD SBT meminta PLN memasukkan 8 desa Kilmury yang belum terjangkau dalam prioritas perluasan jaringan tahun ini. Kawasan termasuk daerah 3T (terdepan, terluar, tertinggal).</p>
+      </div>
+    </div>
+
+    <div class="plan-grid">
+
+      <div class="plan">
+        <h6>Werinama — Skema Penyalaan</h6>
+        <ul>
+          <li><strong>Tobo &amp; Osong</strong> — disuplai dari PLTD Werinama, jaringan dalam proses pengerjaan, siap nyala bila JTM/JTR rampung.</li>
+          <li><strong>Gusalaut &amp; Tum</strong> — direncanakan disuplai dari PLTD Kilmury (kawasan Utian), menunggu integrasi jaringan lintas kecamatan.</li>
+          <li><strong>Tantangan utama</strong> — letak geografis diapit dua sungai besar; perlu konstruksi transmisi khusus.</li>
+          <li><strong>Calon pelanggan</strong> — 314 KK di lima desa kawasan Utian (termasuk Batuasa yang sudah lebih dulu menyala).</li>
+        </ul>
+      </div>
+
+      <div class="plan kilmury">
+        <h6>Kilmury — Skema Penyalaan</h6>
+        <ul>
+          <li><strong>Prioritas DPRD SBT 2026</strong> — 8 desa belum menyala (Selor, Nekan, Afang Kota, Afang Defol, Kumelang, Undur, Mising, Taa) diusulkan masuk perluasan jaringan tahun anggaran berjalan.</li>
+          <li><strong>Peningkatan jam nyala</strong> — Kilmury Kota &amp; Kilbon Kway saat ini 12 jam dari PLTD milik Pemkab SBT, diusulkan ditingkatkan ke 24 jam.</li>
+          <li><strong>Pendukung infrastruktur</strong> — pembangunan ruas jalan strategis Werinama–Kilmury (jalur darat) untuk membuka keterisolasian.</li>
+          <li><strong>Konsultasi PLN</strong> — DPRD SBT telah bertemu PLN Wilayah Maluku &amp; Malut (Mei 2026) untuk percepatan.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="infra-row">
+      <div class="infra">
+        <div class="v">26,8<small>kms</small></div>
+        <div class="l">JTM Werinama</div>
+      </div>
+      <div class="infra">
+        <div class="v">3,2<small>kms</small></div>
+        <div class="l">JTR Werinama</div>
+      </div>
+      <div class="infra">
+        <div class="v">200<small>kVA</small></div>
+        <div class="l">Total Gardu (4 unit)</div>
+      </div>
+      <div class="infra">
+        <div class="v">314<small>KK</small></div>
+        <div class="l">Calon Pelanggan Utian</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="src">
+      Sumber data: BPS Kab. SBT (Kec. Werinama/Kilmury Dalam Angka 2024) · PLN UIW Maluku &amp; Maluku Utara (Okt 2024) · Times Maluku &amp; Rakyat Maluku (Mei 2025–Mei 2026) · Hasil Reses DPRD SBT 2025–2026
+    </div>
+    <div>Disusun Mei 2026</div>
+  </div>
+
+</div>
+</body>
+</html>
